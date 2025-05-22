@@ -1,13 +1,12 @@
 wavio
 sounddevice
+faiss-cpu
 langchain
 crewai
 crewai-tools
 openai-whisper
-TTS
 transformers
 sentence-transformers
-faiss-cpu
 langchain-community
 alpha_vantage
 streamlit
@@ -17,3 +16,5 @@ soundfile
 python-multipart
 langchain-openai
 mangum
+openai
+ffmpeg

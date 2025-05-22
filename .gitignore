@@ -29,6 +29,14 @@ Thumbs.db
 audio.wav
 response.wav
 output_tts.wav
+analysis_brief.txt
+final_answer.txt
+retrieved_info.txt
+scraped_news.txt
+stock_prices.json
+tts_6af6191b91604f5e8d91a7d1e2b58510.wav
+tts_answer.wav
+tts_log.txt
 *.json
 *.txt~
 
@@ -50,4 +58,4 @@ tests/__snapshots__/
 .streamlit/
 
 # Streamlit app (excluded from backend repo)
-frontend.py
+test.py

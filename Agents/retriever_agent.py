@@ -1,5 +1,4 @@
 # tools/retriever_tool.py
-
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from sentence_transformers import SentenceTransformer
@@ -23,13 +22,15 @@ with open(query_path, "r", encoding="utf-8") as f:
     query = f.read().strip()
 # Ensure API_KEY is not None before proceeding or add error handling
 openai.api_key=os.getenv('OPENAI_API_KEY')
-
+embedding_model_id = "BAAI/bge-small-en-v1.5"
+embeddings = HuggingFaceEmbeddings(
+    model_name=embedding_model_id,
+            )   
 source_texts = []
 
 def build_index_from_files(news_file="scraped_news.txt"):
-    global source_texts, index
+    global source_texts
     source_texts.clear()
-    index.reset()
 
     # Load and split scraped news
     if os.path.exists(news_file):
@@ -37,11 +38,7 @@ def build_index_from_files(news_file="scraped_news.txt"):
             lines = [line.strip() for line in f.read().splitlines() if line.strip()]
             source_texts.extend(lines)
 
-    if source_texts:
-        embedding_model_id = "BAAI/bge-small-en-v1.5"
-        embeddings = HuggingFaceEmbeddings(
-            model_name=embedding_model_id,
-                    )    
+    if source_texts:   
         return FAISS.from_texts(source_texts, embeddings)
 @tool("retriever_tool")
 def retriever_tool():
