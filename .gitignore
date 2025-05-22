@@ -1,0 +1,53 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.dll
+
+# Virtual environment
+venv/
+.env
+.venv/
+env/
+ENV/
+
+# VSCode and JetBrains IDE settings
+.vscode/
+.idea/
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+
+# Logs and temp data
+*.log
+*.tmp
+*.swp
+
+# Python runtime files
+audio.wav
+response.wav
+output_tts.wav
+*.json
+*.txt~
+
+# FastAPI/Vercel specifics
+.vercel/
+.vscode/
+requirements.lock
+Pipfile.lock
+
+# Jupyter/Notebook (if used)
+.ipynb_checkpoints/
+
+# Ignore test artifacts
+tests/__snapshots__/
+*.pytest_cache/
+.coverage
+
+# Ignore Streamlit cache
+.streamlit/
+
+# Streamlit app (excluded from backend repo)
+frontend.py
