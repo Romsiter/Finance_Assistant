@@ -1,6 +1,10 @@
-from TTS.api import TTS
 from crewai.tools import tool
 from crewai import Agent, Task, Crew, Process
+import openai
+import os
+from dotenv import load_dotenv
+load_dotenv()
+openai.api_key=os.getenv('OPENAI_API_KEY')
 
 @tool("text_to_speech")
 def text_to_speech(_: str = "") -> str:
@@ -15,17 +19,20 @@ def text_to_speech(_: str = "") -> str:
             return "❌ final_answer.txt is empty."
 
         # Load TTS model
-        tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False, gpu=False)
-
+        speech = openai.audio.speech.create(
+            model="tts-1",
+            voice="alloy",  # or nova, echo, etc.
+            input=text
+        )
         # Generate and save speech
-        tts.tts_to_file(text=text, file_path="output_tts.wav")
+        speech.stream_to_file("output_tts.wav")
 
-        return "✅ Speech saved to 'output_tts.wav'"
+        return "✅ OpenAI TTS saved speech to 'output_tts.wav'"
 
     except FileNotFoundError:
         return "❌ 'final_answer.txt' not found."
     except Exception as e:
-        return f"⚠️ Error during TTS: {str(e)}"
+        return f"⚠️ Error during OpenAI TTS: {str(e)}"
 
 
 tts_agent = Agent(
