@@ -28,7 +28,7 @@ def get_stock_price(symbol: str) -> str:
     Fetches the daily stock price data for a given symbol from AlphaVantage.
 
     Args:
-        symbol (str): The stock symbol (e.g., "AAPL").
+        symbol (str): The stock symbol or stock name.
 
     Returns:
         str: A JSON string containing the daily stock data.
