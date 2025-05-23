@@ -14,6 +14,7 @@ def text_to_speech(text: str | None = None) -> str:
     Converts text (or final_answer.txt) to speech and saves as a WAV file.
     Returns the absolute path to the output file.
     """
+    parent_dir = Path(__file__).resolve().parents[1]  # 1 = one level up from the current script
 
     if text is None:
         try:
@@ -27,8 +28,8 @@ def text_to_speech(text: str | None = None) -> str:
         raise ValueError("No text provided for TTS")
 
     # Create a unique output path
-    out_name = f"tts_answer.wav"
-    out_path = Path(__file__).resolve().parent / out_name
+    out_name = "tts_answer.wav"
+    out_path = parent_dir / out_name
 
     # Generate speech
     speech = openai.audio.speech.create(
