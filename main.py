@@ -6,16 +6,13 @@ from fastapi.responses import FileResponse
 import shutil
 import os
 from crewai import Crew, Process
-from Agents.api_agent import stock_agent, stock_task
-from Agents.analysis_agent import analysis_agent, analysis_task
-from Agents.scraping_agent import scraper_agent, news_task
-from Agents.language_agent import language_agent, synthesis_task
-from Agents.voice_agent import tts_agent, tts_task
-from Agents.retriever_agent import retriever_agent, retrieval_task
+import importlib
 import whisper
 # --- top of main.py ---------------------------
 import os, shutil, whisper
 from fastapi import FastAPI, UploadFile, File, Depends
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent          # <project-root>
 
 # Make absolutely sure ffmpeg.exe is reachable
 FFMPEG_DIR = r"C:\Users\PRANAV BHARDWAJ\Downloads\ffmpeg-7.1.1-full_build\ffmpeg-7.1.1-full_build\bin"   # <-- put *your* bin path here
@@ -43,7 +40,20 @@ async def process_query(audio: UploadFile = File(...)):
     query = transcribe_audio("audio.wav")["text"]
     with open("query.txt", "w", encoding="utf-8") as f:
         f.write(query)
+        
+    mod_names = ["Agents.api_agent", "Agents.scraping_agent", "Agents.retriever_agent",
+                 "Agents.analysis_agent", "Agents.language_agent", "Agents.voice_agent"]
+    
+    mods = [importlib.import_module(m) for m in mod_names]
+    for m in mods: importlib.reload(m)
+    stock_agent,   stock_task   = mods[0].stock_agent,   mods[0].stock_task
+    scraper_agent, news_task    = mods[1].scraper_agent, mods[1].news_task
+    retriever_agent,retrieval_task = mods[2].retriever_agent,mods[2].retrieval_task
+    analysis_agent,analysis_task  = mods[3].analysis_agent, mods[3].analysis_task
+    language_agent,synthesis_task = mods[4].language_agent, mods[4].synthesis_task
+    tts_agent,     tts_task       = mods[5].tts_agent,      mods[5].tts_task
     # Run full pipeline as Crew
+    
     crew = Crew(
         agents=[
             stock_agent,
@@ -67,7 +77,8 @@ async def process_query(audio: UploadFile = File(...)):
 
     result = crew.kickoff()
     print("🔄 Crew completed. Returning result...")
-    return FileResponse("tts_answer.wav", media_type="audio/wav", filename="response.wav")
+    wav_file = BASE_DIR / "tts_answer.wav"
+    return FileResponse(wav_file, media_type="audio/wav", filename="response.wav")
 
 
 @app.get("/")
