@@ -61,5 +61,3 @@ tests/__snapshots__/
 test.py
 
 
-docker-compose.yml
-Dockerfile
